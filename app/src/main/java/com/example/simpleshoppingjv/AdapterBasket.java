@@ -72,7 +72,11 @@ public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder
         }
         public void setItem(ItemBasket item){
             title.setText(item.getTitle());
-            Glide.with(itemView.getContext()).load(item.getImage()).into(imageView);
+            Glide.with(itemView.getContext())
+                    .load(item.getImage())
+                    .placeholder(R.drawable.img_loading)
+                    .error(R.drawable.img_error)
+                    .into(imageView);
             lprice.setText(item.getLprice());
             shopBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,19 +88,9 @@ public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder
                     itemView.getContext().startActivity(intent);
                 }
             });
-      /*      basketDeleteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    SQLiteDatabase sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
-                    String sql = "Delete from basketTable where link = '" + item.getLink() + "';" ;
-                    sqLiteDatabase.execSQL(sql);
-                    sqLiteDatabase.close();
-                    Toast.makeText(itemView.getContext(),"삭제됐습니다.", Toast.LENGTH_SHORT).show();
-                }
-            });*/
         }
-
     }
+
     public void addItem(ItemBasket item){
         items.add(item);
     }

@@ -14,10 +14,11 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+
 public class MainActivity extends AppCompatActivity {
 
     static myDBHelper myDBHelper;
-    SQLiteDatabase sqLiteDatabase;
+    static SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
     }
 
     public static class myDBHelper extends SQLiteOpenHelper {
@@ -70,12 +69,11 @@ public class MainActivity extends AppCompatActivity {
             sqLiteDatabase.execSQL(sql);
             onCreate(sqLiteDatabase);
         }
+    }
 
-        public void add(String title, String link, String image, String lprice){
-            SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-            String sql = "Insert into basketTable values ('" + title + "','" + link + "','" + image+ "','" +  lprice + "');" ;
-            sqLiteDatabase.execSQL(sql);
-            sqLiteDatabase.close();
-        }
+    @Override
+    protected void onDestroy() {
+        myDBHelper.close();
+        super.onDestroy();
     }
 }

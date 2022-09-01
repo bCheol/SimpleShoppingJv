@@ -2,6 +2,7 @@ package com.example.simpleshoppingjv;
 
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,11 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
         }
         public void setItem(ItemSearch item){
             title.setText(item.getTitle());
-            Glide.with(itemView.getContext()).load(item.getImage()).into(imageView);
+            Glide.with(itemView.getContext())
+                    .load(item.getImage())
+                    .placeholder(R.drawable.img_loading)
+                    .error(R.drawable.img_error)
+                    .into(imageView);
             lprice.setText(item.getLprice());
             shopBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -70,7 +75,10 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             basketAddBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MainActivity.myDBHelper.add(item.getTitle(),item.getLink2(),item.getImage(),item.getLprice());
+                    SQLiteDatabase sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
+                    String sql = "Insert into basketTable values ('" + item.getTitle() + "','" + item.getLink2() + "','" + item.getImage() + "','" +  item.getLprice() + "');" ;
+                    sqLiteDatabase.execSQL(sql);
+                    sqLiteDatabase.close();
                     Toast.makeText(itemView.getContext(),"장바구니에 추가됐습니다.", Toast.LENGTH_SHORT).show();
                 }
             });

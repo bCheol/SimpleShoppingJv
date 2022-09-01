@@ -27,10 +27,9 @@ public class FragmentBasket extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapterBasket = new AdapterBasket();
 
-        sqLiteDatabase = MainActivity.myDBHelper.getReadableDatabase();
+        sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("Select * from basketTable",null);
-        int count = cursor.getCount();
-        for(int i=0; i<count; i++){
+        for(int i=0; i<cursor.getCount(); i++){
             cursor.moveToNext();
             String title= cursor.getString(0);
             String link= cursor.getString(1);
@@ -39,16 +38,15 @@ public class FragmentBasket extends Fragment {
             adapterBasket.addItem(new ItemBasket(title, link, image, lprice));
         }
         cursor.close();
-        sqLiteDatabase.close();
+
         recyclerView.setAdapter(adapterBasket);
         //장바구니 삭제
         adapterBasket.setOnBtnClick(new BasketDeleteClickListener() {
             @Override
             public void onBtnClick(AdapterBasket.ViewHolder holder, View view, int position) {
-                SQLiteDatabase sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
+                sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
                 String sql = "Delete from basketTable where link = '" + adapterBasket.items.get(position).getLink() + "';" ;
                 sqLiteDatabase.execSQL(sql);
-                sqLiteDatabase.close();
                 Toast.makeText(requireContext(),"삭제됐습니다.",Toast.LENGTH_SHORT).show();
                 adapterBasket.items.remove (position);
                 adapterBasket.notifyItemRemoved (position);
@@ -56,5 +54,11 @@ public class FragmentBasket extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        sqLiteDatabase.close();
     }
 }
