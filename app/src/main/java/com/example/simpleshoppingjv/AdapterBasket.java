@@ -60,6 +60,7 @@ public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder
             lprice = itemView.findViewById(R.id.lprice);
             shopBtn = itemView.findViewById(R.id.shopBtn);
             basketDeleteBtn = itemView.findViewById(R.id.basketDeleteBtn);
+            //장바구니 삭제 클릭 리스너
             basketDeleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -78,6 +79,7 @@ public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder
                     .error(R.drawable.img_error)
                     .into(imageView);
             lprice.setText(item.getLprice());
+            //자세히 클릭
             shopBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

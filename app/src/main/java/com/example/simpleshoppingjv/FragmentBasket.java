@@ -16,17 +16,19 @@ import android.widget.Toast;
 public class FragmentBasket extends Fragment {
 
     SQLiteDatabase sqLiteDatabase;
-    RecyclerView recyclerView;
-    AdapterBasket adapterBasket;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_basket, container, false);
-        recyclerView = root.findViewById(R.id.recyclerView);
+
+        //리사이클러뷰 설정
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        adapterBasket = new AdapterBasket();
+        AdapterBasket adapterBasket = new AdapterBasket();
 
+        //장바구니(DB) 목록 가져오기
         sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("Select * from basketTable",null);
         for(int i=0; i<cursor.getCount(); i++){
@@ -40,7 +42,7 @@ public class FragmentBasket extends Fragment {
         cursor.close();
 
         recyclerView.setAdapter(adapterBasket);
-        //장바구니 삭제
+        //장바구니(DB) 삭제
         adapterBasket.setOnBtnClick(new BasketDeleteClickListener() {
             @Override
             public void onBtnClick(AdapterBasket.ViewHolder holder, View view, int position) {
@@ -52,7 +54,6 @@ public class FragmentBasket extends Fragment {
                 adapterBasket.notifyItemRemoved (position);
             }
         });
-
         return root;
     }
 

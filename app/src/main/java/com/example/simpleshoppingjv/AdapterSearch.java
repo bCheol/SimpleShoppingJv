@@ -61,6 +61,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
                     .error(R.drawable.img_error)
                     .into(imageView);
             lprice.setText(item.getLprice());
+            //자세히 클릭
             shopBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -68,6 +69,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
                     itemView.getContext().startActivity(intent);
                 }
             });
+            //장바구니(DB) 추가
             basketAddBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

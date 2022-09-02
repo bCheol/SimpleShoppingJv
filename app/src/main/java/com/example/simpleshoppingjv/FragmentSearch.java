@@ -33,26 +33,31 @@ public class FragmentSearch extends Fragment {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         EditText editText = root.findViewById(R.id.editText);
+        //editText 키보드 설정
         editText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
+        //스피너 생성
         Spinner spinner = root.findViewById(R.id.spinner);
         String[] spinnerItem = {"유사도순","날짜순","가격낮은순","가격높은순"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(root.getContext(), android.R.layout.simple_spinner_item, spinnerItem);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        //리사이클러뷰 설정
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         AdapterSearch adapter = new AdapterSearch();
 
+        //레트로핏 생성
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://openapi.naver.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
 
+        //네이버에서 발급 받은 id, pwd
         String clientId = "zaOWIdW8nHmrEsOkNRH2";
         String clientSecret = "XZymtAbD_W";
 
@@ -61,6 +66,7 @@ public class FragmentSearch extends Fragment {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if(i == KeyEvent.KEYCODE_ENTER){
                     inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                    //스피너 선택
                     String sort="";
                     if(spinner.getSelectedItem().toString().equals("유사도순")){
                         sort="sim";
@@ -73,9 +79,9 @@ public class FragmentSearch extends Fragment {
                     }
                     inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
+                    //call 객체 생성, 실행
                     adapter.clearItem();
                     Call<GetData> call =retrofitAPI.getData(editText.getText().toString(),100, sort, clientId, clientSecret);
-
                     call.enqueue(new Callback<GetData>() {
                         @Override
                         public void onResponse(@NonNull Call<GetData> call, @NonNull Response<GetData> response) {
@@ -100,7 +106,6 @@ public class FragmentSearch extends Fragment {
                 return false;
             }
         });
-
         return root;
     }
 }

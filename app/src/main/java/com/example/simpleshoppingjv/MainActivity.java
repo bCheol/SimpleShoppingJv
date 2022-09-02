@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //DB 관리
     public static class myDBHelper extends SQLiteOpenHelper {
         public myDBHelper(@Nullable Context context) {
             super(context, "basket", null, 1);
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    //뒤로가기 두 번 클릭
     @Override
     public void onBackPressed() {
       //  super.onBackPressed();

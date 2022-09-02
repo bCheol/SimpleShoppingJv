@@ -7,5 +7,4 @@
     <item
         android:title="장바구니"
         android:id="@+id/shoppingBasket"/>
-
 </menu>
