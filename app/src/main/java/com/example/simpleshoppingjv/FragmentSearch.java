@@ -8,12 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -24,7 +25,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class FragmentSearch extends Fragment {
 
     @Override
@@ -33,8 +33,15 @@ public class FragmentSearch extends Fragment {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         EditText editText = root.findViewById(R.id.editText);
+        editText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+        InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
         Spinner spinner = root.findViewById(R.id.spinner);
-        Button searchButton = root.findViewById(R.id.searchButton);
+        String[] spinnerItem = {"유사도순","날짜순","가격낮은순","가격높은순"};
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(root.getContext(), android.R.layout.simple_spinner_item, spinnerItem);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -49,52 +56,51 @@ public class FragmentSearch extends Fragment {
         String clientId = "zaOWIdW8nHmrEsOkNRH2";
         String clientSecret = "XZymtAbD_W";
 
-        String[] spinnerItem = {"유사도순","날짜순","가격낮은순","가격높은순"};
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(root.getContext(), android.R.layout.simple_spinner_item, spinnerItem);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
-
-        InputMethodManager inputMethodManager = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View view) {
-                String sort="";
-                if(spinner.getSelectedItem().toString().equals("유사도순")){
-                    sort="sim";
-                }else if(spinner.getSelectedItem().toString().equals("날짜순")){
-                    sort="date";
-                }else if(spinner.getSelectedItem().toString().equals("가격낮은순")){
-                    sort="asc";
-                }else if(spinner.getSelectedItem().toString().equals("가격높은순")){
-                    sort="dsc";
-                }
-                inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(i == KeyEvent.KEYCODE_ENTER){
+                    inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                    String sort="";
+                    if(spinner.getSelectedItem().toString().equals("유사도순")){
+                        sort="sim";
+                    }else if(spinner.getSelectedItem().toString().equals("날짜순")){
+                        sort="date";
+                    }else if(spinner.getSelectedItem().toString().equals("가격낮은순")){
+                        sort="asc";
+                    }else if(spinner.getSelectedItem().toString().equals("가격높은순")){
+                        sort="dsc";
+                    }
+                    inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
-                adapter.clearItem();
-                Call<GetData> call =retrofitAPI.getData(editText.getText().toString(),100, sort, clientId, clientSecret);
+                    adapter.clearItem();
+                    Call<GetData> call =retrofitAPI.getData(editText.getText().toString(),100, sort, clientId, clientSecret);
 
-                call.enqueue(new Callback<GetData>() {
-                    @Override
-                    public void onResponse(@NonNull Call<GetData> call, @NonNull Response<GetData> response) {
-                        GetData data = response.body();
-                        if (data != null) {
-                            for(int i=0; i<data.getItem().size(); i++){
-                                String title = data.getItem().get(i).getTitle();
-                                String link = data.getItem().get(i).getLink();
-                                String image = data.getItem().get(i).getImage();
-                                String lprice = data.getItem().get(i).getLprice();
-                                adapter.addItem(new ItemSearch(title, link, image, lprice));
+                    call.enqueue(new Callback<GetData>() {
+                        @Override
+                        public void onResponse(@NonNull Call<GetData> call, @NonNull Response<GetData> response) {
+                            GetData data = response.body();
+                            if (data != null) {
+                                for(int i=0; i<data.getItem().size(); i++){
+                                    String title = data.getItem().get(i).getTitle();
+                                    String link = data.getItem().get(i).getLink();
+                                    String image = data.getItem().get(i).getImage();
+                                    String lprice = data.getItem().get(i).getLprice();
+                                    adapter.addItem(new ItemSearch(title, link, image, lprice));
+                                }
+                                recyclerView.setAdapter(adapter);
                             }
-                            recyclerView.setAdapter(adapter);
                         }
-                    }
-                    @Override
-                    public void onFailure(@NonNull Call<GetData> call, @NonNull Throwable t) {
-                        Toast.makeText(requireActivity(),t.toString(),Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(@NonNull Call<GetData> call, @NonNull Throwable t) {
+                            Toast.makeText(requireActivity(),t.toString(),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                return false;
             }
         });
+
         return root;
     }
 }

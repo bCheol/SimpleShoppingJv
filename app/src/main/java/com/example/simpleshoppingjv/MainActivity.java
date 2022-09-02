@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     static myDBHelper myDBHelper;
     static SQLiteDatabase sqLiteDatabase;
+    long backpressedTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,5 +77,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         myDBHelper.close();
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+      //  super.onBackPressed();
+        if (System.currentTimeMillis() > backpressedTime + 2000) {
+            backpressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        } else if (System.currentTimeMillis() <= backpressedTime + 2000) {
+            finish();
+        }
     }
 }
