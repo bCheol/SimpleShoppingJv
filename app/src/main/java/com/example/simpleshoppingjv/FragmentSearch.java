@@ -82,7 +82,7 @@ public class FragmentSearch extends Fragment {
                                 String title = data.getItem().get(i).getTitle();
                                 String link = data.getItem().get(i).getLink();
                                 String image = data.getItem().get(i).getImage();
-                                int lprice = data.getItem().get(i).getLprice();
+                                String lprice = data.getItem().get(i).getLprice();
                                 adapter.addItem(new ItemSearch(title, link, image, lprice));
                             }
                             recyclerView.setAdapter(adapter);

@@ -7,18 +7,24 @@ public class GetDataItem {
     int lprice;     //최저가 정보
 
     public String getTitle() {
-        return title;
+        return title.replace("<b>","").replace("</b>","");
     }
 
     public String getLink() {
-        return link;
+        return changUrl(link);
     }
 
-   public String getImage() {
+    public String changUrl(String link){
+        int a = link.indexOf("=");
+        String b = link.substring(a+1);
+        return "https://msearch.shopping.naver.com/product/" + b ;
+    }
+
+    public String getImage() {
         return image;
     }
 
-    public int getLprice() {
-        return lprice;
+    public String getLprice() {
+        return String.valueOf(lprice);
     }
 }

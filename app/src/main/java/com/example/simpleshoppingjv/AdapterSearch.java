@@ -64,7 +64,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             shopBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink2()));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink()));
                     itemView.getContext().startActivity(intent);
                 }
             });
@@ -72,7 +72,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
                 @Override
                 public void onClick(View view) {
                     SQLiteDatabase sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
-                    String sql = "Insert into basketTable values ('" + item.getTitle() + "','" + item.getLink2() + "','" + item.getImage() + "','" +  item.getLprice() + "');" ;
+                    String sql = "Insert into basketTable values ('" + item.getTitle() + "','" + item.getLink() + "','" + item.getImage() + "','" +  item.getLprice() + "');" ;
                     sqLiteDatabase.execSQL(sql);
                     sqLiteDatabase.close();
                     Toast.makeText(itemView.getContext(),"장바구니에 추가됐습니다.", Toast.LENGTH_SHORT).show();
