@@ -38,7 +38,6 @@ public class ItemSearch {
     public String changUrl(String link){
         int a = link.indexOf("=");
         String b = link.substring(a+1);
-    //    return "https://msearch.shopping.naver.com/catalog/" + b ;
         return "https://msearch.shopping.naver.com/product/" + b ;
     }
 

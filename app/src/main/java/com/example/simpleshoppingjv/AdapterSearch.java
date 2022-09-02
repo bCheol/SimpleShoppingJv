@@ -64,10 +64,6 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             shopBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                /*    Intent intent = new Intent(itemView.getContext(), WebViewActicity.class);
-                    intent.putExtra("url", item.getLink2());
-                    Log.d("test",item.getLink2());
-                    itemView.getContext().startActivity(intent);*/
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink2()));
                     itemView.getContext().startActivity(intent);
                 }

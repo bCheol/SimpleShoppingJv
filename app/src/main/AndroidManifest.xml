@@ -18,10 +18,6 @@
         tools:targetApi="31"
         >
         <activity
-            android:name=".WebViewActicity"
-            android:exported="false"
-            />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan"

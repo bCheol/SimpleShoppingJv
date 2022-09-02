@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,22 +78,19 @@ public class FragmentSearch extends Fragment {
                     public void onResponse(@NonNull Call<GetData> call, @NonNull Response<GetData> response) {
                         GetData data = response.body();
                         if (data != null) {
-                            if (data.getItem().size() != 0) {
-                                for(int i=0; i<data.getItem().size(); i++){
-                                    String title = data.getItem().get(i).getTitle();
-                                    String link = data.getItem().get(i).getLink();
-                                    String image = data.getItem().get(i).getImage();
-                                    int lprice = data.getItem().get(i).getLprice();
-                                    adapter.addItem(new ItemSearch(title, link, image, lprice));
-                                }
-                                recyclerView.setAdapter(adapter);
+                            for(int i=0; i<data.getItem().size(); i++){
+                                String title = data.getItem().get(i).getTitle();
+                                String link = data.getItem().get(i).getLink();
+                                String image = data.getItem().get(i).getImage();
+                                int lprice = data.getItem().get(i).getLprice();
+                                adapter.addItem(new ItemSearch(title, link, image, lprice));
                             }
+                            recyclerView.setAdapter(adapter);
                         }
                     }
                     @Override
                     public void onFailure(@NonNull Call<GetData> call, @NonNull Throwable t) {
                         Toast.makeText(requireActivity(),t.toString(),Toast.LENGTH_SHORT).show();
-                        Log.d("test", t.toString());
                     }
                 });
             }
