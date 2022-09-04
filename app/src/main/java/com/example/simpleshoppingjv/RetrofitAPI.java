@@ -7,7 +7,7 @@ import retrofit2.http.Query;
 
 public interface RetrofitAPI {
 
-    @GET("/v1/search/shop.json")
+    @GET("v1/search/shop.json")
     Call<GetData> getData(
             @Query("query") String query,   //검색할 항목 (EditText 값)
             @Query("display") int display,  //가져오는 갯수

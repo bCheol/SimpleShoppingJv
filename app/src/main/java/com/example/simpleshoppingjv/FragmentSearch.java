@@ -55,7 +55,7 @@ public class FragmentSearch extends Fragment {
 
         //레트로핏 생성
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://openapi.naver.com")
+                .baseUrl("https://openapi.naver.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
@@ -68,7 +68,7 @@ public class FragmentSearch extends Fragment {
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if(i == KeyEvent.KEYCODE_ENTER){
+                if(i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction()== KeyEvent.ACTION_UP){
                     inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                     if(!editText.getText().toString().equals("")) {
                         //스피너 선택
@@ -87,12 +87,13 @@ public class FragmentSearch extends Fragment {
                         //call 객체 생성, 실행
                         Call<GetData> call = retrofitAPI.getData(editText.getText().toString(), 100, sort, clientId, clientSecret);
                         getCall(call, adapter);
-                    }else{
+                    }else {
                         Toast.makeText(requireActivity(),"검색어를 입력하세요.",Toast.LENGTH_SHORT).show();
                     }
                 }
-                return false;
+                return true;
             }
+
         });
 
         //스피너 클릭 시
