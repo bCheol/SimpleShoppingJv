@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -27,6 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentSearch extends Fragment {
 
+    RecyclerView recyclerView;
+    Boolean spinnerCheck = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class FragmentSearch extends Fragment {
         spinner.setAdapter(spinnerAdapter);
 
         //리사이클러뷰 설정
-        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
+        recyclerView = root.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         AdapterSearch adapter = new AdapterSearch();
@@ -61,51 +64,104 @@ public class FragmentSearch extends Fragment {
         String clientId = "zaOWIdW8nHmrEsOkNRH2";
         String clientSecret = "XZymtAbD_W";
 
+        //키보드 검색 버튼 클릭 시
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if(i == KeyEvent.KEYCODE_ENTER){
                     inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                    //스피너 선택
-                    String sort="";
-                    if(spinner.getSelectedItem().toString().equals("유사도순")){
-                        sort="sim";
-                    }else if(spinner.getSelectedItem().toString().equals("날짜순")){
-                        sort="date";
-                    }else if(spinner.getSelectedItem().toString().equals("가격낮은순")){
-                        sort="asc";
-                    }else if(spinner.getSelectedItem().toString().equals("가격높은순")){
-                        sort="dsc";
-                    }
-                    inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                    if(!editText.getText().toString().equals("")) {
+                        //스피너 선택
+                        String sort = "";
+                        if (spinner.getSelectedItem().toString().equals("유사도순")) {
+                            sort = "sim";
+                        } else if (spinner.getSelectedItem().toString().equals("날짜순")) {
+                            sort = "date";
+                        } else if (spinner.getSelectedItem().toString().equals("가격낮은순")) {
+                            sort = "asc";
+                        } else if (spinner.getSelectedItem().toString().equals("가격높은순")) {
+                            sort = "dsc";
+                        }
+                        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
-                    //call 객체 생성, 실행
-                    adapter.clearItem();
-                    Call<GetData> call =retrofitAPI.getData(editText.getText().toString(),100, sort, clientId, clientSecret);
-                    call.enqueue(new Callback<GetData>() {
-                        @Override
-                        public void onResponse(@NonNull Call<GetData> call, @NonNull Response<GetData> response) {
-                            GetData data = response.body();
-                            if (data != null) {
-                                for(int i=0; i<data.getItem().size(); i++){
-                                    String title = data.getItem().get(i).getTitle();
-                                    String link = data.getItem().get(i).getLink();
-                                    String image = data.getItem().get(i).getImage();
-                                    String lprice = data.getItem().get(i).getLprice();
-                                    adapter.addItem(new ItemSearch(title, link, image, lprice));
-                                }
-                                recyclerView.setAdapter(adapter);
-                            }
-                        }
-                        @Override
-                        public void onFailure(@NonNull Call<GetData> call, @NonNull Throwable t) {
-                            Toast.makeText(requireActivity(),t.toString(),Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                        //call 객체 생성, 실행
+                        Call<GetData> call = retrofitAPI.getData(editText.getText().toString(), 100, sort, clientId, clientSecret);
+                        getCall(call, adapter);
+                    }else{
+                        Toast.makeText(requireActivity(),"검색어를 입력하세요.",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return false;
             }
         });
+
+        //스피너 클릭 시
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(spinnerCheck) {
+                    spinnerCheck = false;
+                } else {
+                    if (!editText.getText().toString().equals("")) {
+                        Call<GetData> call;
+                        switch (spinnerItem[i]) {
+                            case "유사도순":
+                                call = retrofitAPI.getData(editText.getText().toString(), 100, "sim", clientId, clientSecret);
+                                getCall(call, adapter);
+                                break;
+                            case "날짜순":
+                                call = retrofitAPI.getData(editText.getText().toString(), 100, "date", clientId, clientSecret);
+                                getCall(call, adapter);
+                                break;
+                            case "가격낮은순":
+                                call = retrofitAPI.getData(editText.getText().toString(), 100, "asc", clientId, clientSecret);
+                                getCall(call, adapter);
+                                break;
+                            case "가격높은순":
+                                call = retrofitAPI.getData(editText.getText().toString(), 100, "dsc", clientId, clientSecret);
+                                getCall(call, adapter);
+                                break;
+                        }
+                    }else {
+                        Toast.makeText(requireActivity(),"검색어를 입력하세요.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         return root;
+    }
+
+    //call 값 가져오기
+    public void getCall(Call<GetData> call, AdapterSearch adapter){
+        adapter.clearItem();
+        call.enqueue(new Callback<GetData>() {
+            @Override
+            public void onResponse(@NonNull Call<GetData> call, @NonNull Response<GetData> response) {
+                GetData data = response.body();
+                if (data != null) {
+                    if(data.getTotal() != 0) {
+                        for (int i = 0; i < data.getItem().size(); i++) {
+                            String title = data.getItem().get(i).getTitle();
+                            String link = data.getItem().get(i).getLink();
+                            String image = data.getItem().get(i).getImage();
+                            String lprice = data.getItem().get(i).getLprice();
+                            adapter.addItem(new ItemSearch(title, link, image, lprice));
+                        }
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(requireActivity(),"찾는 상품이 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<GetData> call, @NonNull Throwable t) {
+                Toast.makeText(requireActivity(),t.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
