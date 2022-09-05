@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ public class FragmentSearch extends Fragment {
 
     RecyclerView recyclerView;
     Boolean spinnerCheck = true;
+    Toast toast;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,6 +66,8 @@ public class FragmentSearch extends Fragment {
         String clientId = "zaOWIdW8nHmrEsOkNRH2";
         String clientSecret = "XZymtAbD_W";
 
+        toast = Toast.makeText(requireActivity(),"찾는 상품이 없습니다.", Toast.LENGTH_SHORT);
+
         //키보드 검색 버튼 클릭 시
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -88,12 +92,11 @@ public class FragmentSearch extends Fragment {
                         Call<GetData> call = retrofitAPI.getData(editText.getText().toString(), 100, sort, clientId, clientSecret);
                         getCall(call, adapter);
                     }else {
-                        Toast.makeText(requireActivity(),"검색어를 입력하세요.",Toast.LENGTH_SHORT).show();
+                        runToast(toast);
                     }
                 }
                 return true;
             }
-
         });
 
         //스피너 클릭 시
@@ -124,7 +127,7 @@ public class FragmentSearch extends Fragment {
                                 break;
                         }
                     }else {
-                        Toast.makeText(requireActivity(),"검색어를 입력하세요.",Toast.LENGTH_SHORT).show();
+                        runToast(toast);
                     }
                 }
             }
@@ -164,5 +167,16 @@ public class FragmentSearch extends Fragment {
                 Toast.makeText(requireActivity(),t.toString(),Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //토스트 실행
+    public void runToast(Toast toast){
+        toast.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel();
+            }
+        }, 1000);
     }
 }

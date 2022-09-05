@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class FragmentBasket extends Fragment {
         cursor.close();
 
         recyclerView.setAdapter(adapterBasket);
+        Toast toast = Toast.makeText(requireContext(),"삭제됐습니다.",Toast.LENGTH_SHORT);
         //장바구니(DB) 삭제
         adapterBasket.setOnBtnClick(new BasketDeleteClickListener() {
             @Override
@@ -49,9 +51,15 @@ public class FragmentBasket extends Fragment {
                 sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
                 String sql = "Delete from basketTable where link = '" + adapterBasket.items.get(position).getLink() + "';" ;
                 sqLiteDatabase.execSQL(sql);
-                Toast.makeText(requireContext(),"삭제됐습니다.",Toast.LENGTH_SHORT).show();
                 adapterBasket.items.remove (position);
                 adapterBasket.notifyItemRemoved (position);
+                toast.show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast.cancel();
+                    }
+                }, 500);
             }
         });
         return root;
