@@ -31,7 +31,7 @@ public class FragmentSearch extends Fragment {
 
     RecyclerView recyclerView;
     Boolean spinnerCheck = true;
-    Toast toast;
+    Toast toast, toast2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,6 +67,7 @@ public class FragmentSearch extends Fragment {
         String clientSecret = "XZymtAbD_W";
 
         toast = Toast.makeText(requireActivity(),"찾는 상품이 없습니다.", Toast.LENGTH_SHORT);
+        toast2 = Toast.makeText(requireActivity(),"검색어를 입력해주세요.", Toast.LENGTH_SHORT);
 
         //키보드 검색 버튼 클릭 시
         editText.setOnKeyListener(new View.OnKeyListener() {
@@ -92,10 +93,10 @@ public class FragmentSearch extends Fragment {
                         Call<GetData> call = retrofitAPI.getData(editText.getText().toString(), 100, sort, clientId, clientSecret);
                         getCall(call, adapter);
                     }else {
-                        runToast(toast);
+                        runToast(toast2);
                     }
                 }
-                return true;
+                return false;
             }
         });
 
@@ -127,7 +128,7 @@ public class FragmentSearch extends Fragment {
                                 break;
                         }
                     }else {
-                        runToast(toast);
+                        runToast(toast2);
                     }
                 }
             }
@@ -158,7 +159,7 @@ public class FragmentSearch extends Fragment {
                         }
                         recyclerView.setAdapter(adapter);
                     } else {
-                        Toast.makeText(requireActivity(),"찾는 상품이 없습니다.", Toast.LENGTH_SHORT).show();
+                        runToast(toast);
                     }
                 }
             }
