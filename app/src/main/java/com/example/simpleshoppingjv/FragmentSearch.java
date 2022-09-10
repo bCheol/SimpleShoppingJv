@@ -33,8 +33,7 @@ public class FragmentSearch extends Fragment {
     Boolean spinnerCheck = true;
     Toast toast, toast2;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         EditText editText = root.findViewById(R.id.editText);
@@ -53,7 +52,7 @@ public class FragmentSearch extends Fragment {
         recyclerView = root.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        AdapterSearch adapter = new AdapterSearch();
+        AdapterSearch adapterSearch = new AdapterSearch();
 
         //레트로핏 생성
         Retrofit retrofit = new Retrofit.Builder()
@@ -91,7 +90,7 @@ public class FragmentSearch extends Fragment {
 
                         //call 객체 생성, 실행
                         Call<GetData> call = retrofitAPI.getData(editText.getText().toString(), 100, sort, clientId, clientSecret);
-                        getCall(call, adapter);
+                        getCall(call, adapterSearch);
                     }else {
                         runToast(toast2);
                     }
@@ -112,19 +111,19 @@ public class FragmentSearch extends Fragment {
                         switch (spinnerItem[i]) {
                             case "유사도순":
                                 call = retrofitAPI.getData(editText.getText().toString(), 100, "sim", clientId, clientSecret);
-                                getCall(call, adapter);
+                                getCall(call, adapterSearch);
                                 break;
                             case "날짜순":
                                 call = retrofitAPI.getData(editText.getText().toString(), 100, "date", clientId, clientSecret);
-                                getCall(call, adapter);
+                                getCall(call, adapterSearch);
                                 break;
                             case "가격낮은순":
                                 call = retrofitAPI.getData(editText.getText().toString(), 100, "asc", clientId, clientSecret);
-                                getCall(call, adapter);
+                                getCall(call, adapterSearch);
                                 break;
                             case "가격높은순":
                                 call = retrofitAPI.getData(editText.getText().toString(), 100, "dsc", clientId, clientSecret);
-                                getCall(call, adapter);
+                                getCall(call, adapterSearch);
                                 break;
                         }
                     }else {
@@ -155,7 +154,7 @@ public class FragmentSearch extends Fragment {
                             String link = data.getItem().get(i).getLink();
                             String image = data.getItem().get(i).getImage();
                             String lprice = data.getItem().get(i).getLprice();
-                            adapter.addItem(new ItemSearch(title, link, image, lprice));
+                            adapter.addItem(new ItemDB(title, link, image, lprice));
                         }
                         recyclerView.setAdapter(adapter);
                     } else {

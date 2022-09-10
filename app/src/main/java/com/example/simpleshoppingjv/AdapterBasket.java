@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder> implements BasketDeleteClickListener{
 
-    ArrayList<ItemBasket> items = new ArrayList<>();
+    ArrayList<ItemDB> basketItem = new ArrayList<>();
     BasketDeleteClickListener listener;
 
     @NonNull
@@ -25,18 +25,18 @@ public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView = inflater.inflate(R.layout.item_basket, parent, false);
-        return new AdapterBasket.ViewHolder(itemView, this);
+        return new ViewHolder(itemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ItemBasket item = items.get(position);
+        ItemDB item = basketItem.get(position);
         holder.setItem(item);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return basketItem.size();
     }
 
     public void setOnBtnClick(BasketDeleteClickListener listener){
@@ -71,7 +71,7 @@ public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder
                 }
             });
         }
-        public void setItem(ItemBasket item){
+        public void setItem(ItemDB item){
             title.setText(item.getTitle());
             Glide.with(itemView.getContext())
                     .load(item.getImage())
@@ -90,7 +90,7 @@ public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder
         }
     }
 
-    public void addItem(ItemBasket item){
-        items.add(item);
+    public void addItem(ItemDB item){
+        basketItem.add(item);
     }
 }

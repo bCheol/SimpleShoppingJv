@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder>{
 
-    ArrayList<ItemSearch> items = new ArrayList<>();
+    ArrayList<ItemDB> searchItem = new ArrayList<>();
 
     @NonNull
     @Override
@@ -34,13 +34,13 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ItemSearch item = items.get(position);
+        ItemDB item = searchItem.get(position);
         holder.setItem(item);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return searchItem.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -56,7 +56,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             basketAddBtn = itemView.findViewById(R.id.basketAddBtn);
             toast = Toast.makeText(itemView.getContext(), "장바구니에 추가됐습니다.", Toast.LENGTH_SHORT);
         }
-        public void setItem(ItemSearch item){
+        public void setItem(ItemDB item){
             title.setText(item.getTitle());
             Glide.with(itemView.getContext())
                     .load(item.getImage())
@@ -92,11 +92,11 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
         }
     }
 
-    public void addItem(ItemSearch item){
-        items.add(item);
+    public void addItem(ItemDB item){
+        searchItem.add(item);
     }
 
     public void clearItem(){
-        items.clear();
+        searchItem.clear();
     }
 }

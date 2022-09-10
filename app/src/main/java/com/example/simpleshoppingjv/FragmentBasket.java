@@ -19,8 +19,7 @@ public class FragmentBasket extends Fragment {
     SQLiteDatabase sqLiteDatabase;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_basket, container, false);
 
         //리사이클러뷰 설정
@@ -38,20 +37,22 @@ public class FragmentBasket extends Fragment {
             String link= cursor.getString(1);
             String image = cursor.getString(2);
             String lprice = cursor.getString(3);
-            adapterBasket.addItem(new ItemBasket(title, link, image, lprice));
+            adapterBasket.addItem(new ItemDB(title, link, image, lprice));
         }
         cursor.close();
 
         recyclerView.setAdapter(adapterBasket);
+
         Toast toast = Toast.makeText(requireContext(),"삭제됐습니다.",Toast.LENGTH_SHORT);
+
         //장바구니(DB) 삭제
         adapterBasket.setOnBtnClick(new BasketDeleteClickListener() {
             @Override
             public void onBtnClick(AdapterBasket.ViewHolder holder, View view, int position) {
                 sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
-                String sql = "Delete from basketTable where link = '" + adapterBasket.items.get(position).getLink() + "';" ;
+                String sql = "Delete from basketTable where link = '" + adapterBasket.basketItem.get(position).getLink() + "';" ;
                 sqLiteDatabase.execSQL(sql);
-                adapterBasket.items.remove (position);
+                adapterBasket.basketItem.remove (position);
                 adapterBasket.notifyItemRemoved (position);
                 toast.show();
                 new Handler().postDelayed(new Runnable() {
