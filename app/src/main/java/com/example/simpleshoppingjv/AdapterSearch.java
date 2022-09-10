@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder>{
 
-    ArrayList<ItemDB> searchItem = new ArrayList<>();
+    ArrayList<ColumnSearch> searchItem = new ArrayList<>();
 
     @NonNull
     @Override
@@ -34,7 +34,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ItemDB item = searchItem.get(position);
+        ColumnSearch item = searchItem.get(position);
         holder.setItem(item);
     }
 
@@ -56,7 +56,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             basketAddBtn = itemView.findViewById(R.id.basketAddBtn);
             toast = Toast.makeText(itemView.getContext(), "장바구니에 추가됐습니다.", Toast.LENGTH_SHORT);
         }
-        public void setItem(ItemDB item){
+        public void setItem(ColumnSearch item){
             title.setText(item.getTitle());
             Glide.with(itemView.getContext())
                     .load(item.getImage())
@@ -77,7 +77,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
                 @Override
                 public void onClick(View view) {
                     SQLiteDatabase sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
-                    String sql = "Insert into basketTable values ('" + item.getTitle() + "','" + item.getLink() + "','" + item.getImage() + "','" +  item.getLprice() + "');" ;
+                    String sql = "Insert into basketTable (title, link, image, lprice) values ('" + item.getTitle() + "','" + item.getLink() + "','" + item.getImage() + "','" +  item.getLprice() + "');" ;
                     sqLiteDatabase.execSQL(sql);
                     sqLiteDatabase.close();
                     toast.show();
@@ -92,7 +92,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
         }
     }
 
-    public void addItem(ItemDB item){
+    public void addItem(ColumnSearch item){
         searchItem.add(item);
     }
 

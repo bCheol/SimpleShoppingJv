@@ -33,11 +33,12 @@ public class FragmentBasket extends Fragment {
         Cursor cursor = sqLiteDatabase.rawQuery("Select * from basketTable",null);
         for(int i=0; i<cursor.getCount(); i++){
             cursor.moveToNext();
-            String title= cursor.getString(0);
-            String link= cursor.getString(1);
-            String image = cursor.getString(2);
-            String lprice = cursor.getString(3);
-            adapterBasket.addItem(new ItemDB(title, link, image, lprice));
+            int id = cursor.getInt(0);
+            String title= cursor.getString(1);
+            String link= cursor.getString(2);
+            String image = cursor.getString(3);
+            String lprice = cursor.getString(4);
+            adapterBasket.addItem(new ColumnBasket(id, title, link, image, lprice));
         }
         cursor.close();
 
@@ -50,7 +51,7 @@ public class FragmentBasket extends Fragment {
             @Override
             public void onBtnClick(AdapterBasket.ViewHolder holder, View view, int position) {
                 sqLiteDatabase = MainActivity.myDBHelper.getWritableDatabase();
-                String sql = "Delete from basketTable where link = '" + adapterBasket.basketItem.get(position).getLink() + "';" ;
+                String sql = "Delete from basketTable where id = '" + adapterBasket.basketItem.get(position).getId() + "';" ;
                 sqLiteDatabase.execSQL(sql);
                 adapterBasket.basketItem.remove (position);
                 adapterBasket.notifyItemRemoved (position);

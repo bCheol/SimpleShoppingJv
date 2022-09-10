@@ -1,9 +1,9 @@
 package com.example.simpleshoppingjv;
 
-public class ItemDB {
+public class ColumnSearch {
     String title, link, image, lprice;
 
-    public ItemDB(String title, String link, String image, String lprice) {
+    public ColumnSearch(String title, String link, String image, String lprice) {
         this.title = title;
         this.link = link;
         this.image = image;

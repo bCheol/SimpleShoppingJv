@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.searchView:
                         getSupportFragmentManager().beginTransaction().remove(fragmentBasket).commit();
                         getSupportFragmentManager().beginTransaction().show(fragmentSearch).commit();
-
                         break;
                     case R.id.shoppingBasket:
                         getSupportFragmentManager().beginTransaction().hide(fragmentSearch).commit();
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            String sql = "CREATE TABLE if not exists basketTable (title text, link text, image text, lprice text)";
+            String sql = "CREATE TABLE if not exists basketTable (id integer primary key autoincrement, title text, link text, image text, lprice text)";
             sqLiteDatabase.execSQL(sql);
         }
         @Override
