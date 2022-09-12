@@ -1,9 +1,9 @@
 package com.example.simpleshoppingjv;
 
-public class ColumnSearch {
+public class RecyclerItemSearch {
     String title, link, image, lprice;
 
-    public ColumnSearch(String title, String link, String image, String lprice) {
+    public RecyclerItemSearch(String title, String link, String image, String lprice) {
         this.title = title;
         this.link = link;
         this.image = image;

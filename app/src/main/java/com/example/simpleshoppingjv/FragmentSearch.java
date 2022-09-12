@@ -154,7 +154,7 @@ public class FragmentSearch extends Fragment {
                             String link = data.getItem().get(i).getLink();
                             String image = data.getItem().get(i).getImage();
                             String lprice = data.getItem().get(i).getLprice();
-                            adapter.addItem(new ColumnSearch(title, link, image, lprice));
+                            adapter.addItem(new RecyclerItemSearch(title, link, image, lprice));
                         }
                         recyclerView.setAdapter(adapter);
                     } else {
