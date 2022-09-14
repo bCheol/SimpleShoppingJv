@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +45,8 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView title, lprice, shopBtn, basketAddBtn ;
+        TextView title, lprice ;
+        Button  shopBtn, basketAddBtn ;
         ImageView imageView;
         Toast toast ;
         public ViewHolder(@NonNull View itemView) {

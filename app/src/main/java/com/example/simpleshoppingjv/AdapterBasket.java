@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,7 +52,8 @@ public class AdapterBasket extends RecyclerView.Adapter<AdapterBasket.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView title, lprice, shopBtn, basketDeleteBtn;
+        TextView title, lprice ;
+        Button shopBtn, basketDeleteBtn ;
         ImageView imageView;
         public ViewHolder(@NonNull View itemView, final BasketDeleteClickListener listener) {
             super(itemView);
