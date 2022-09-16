@@ -150,6 +150,18 @@ public class FragmentSearch extends Fragment {
                             adapter.addItem(new RecyclerItemSearch(title, link, image, lprice));
                         }
                         recyclerView.setAdapter(adapter);
+                        //리사이클러뷰 마지막 스크롤 시 알림
+                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                            @Override
+                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                super.onScrolled(recyclerView, dx, dy);
+                                int lastPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                                int itemTotalCount = adapter.getItemCount()- 1;
+                                if (lastPosition == itemTotalCount) {
+                                    Toast.makeText(getContext(), "마지막 입니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     } else {
                         runToast(toast);
                     }
