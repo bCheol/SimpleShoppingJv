@@ -54,13 +54,6 @@ public class FragmentSearch extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         AdapterSearch adapterSearch = new AdapterSearch();
 
-        //레트로핏 생성
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://openapi.naver.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
-
         //네이버에서 발급 받은 id, pwd
         String clientId = "zaOWIdW8nHmrEsOkNRH2";
         String clientSecret = "XZymtAbD_W";
@@ -89,7 +82,7 @@ public class FragmentSearch extends Fragment {
                         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
                         //call 객체 생성, 실행
-                        Call<GetData> call = retrofitAPI.getData(editText.getText().toString(), 100, sort, clientId, clientSecret);
+                        Call<GetData> call = InsRetrofit.getInstance().retrofitAPI.getData(editText.getText().toString(), 100, sort, clientId, clientSecret);
                         getCall(call, adapterSearch);
                     }else {
                         runToast(toast2);
@@ -110,19 +103,19 @@ public class FragmentSearch extends Fragment {
                         Call<GetData> call;
                         switch (spinnerItem[i]) {
                             case "유사도순":
-                                call = retrofitAPI.getData(editText.getText().toString(), 100, "sim", clientId, clientSecret);
+                                call = InsRetrofit.getInstance().retrofitAPI.getData(editText.getText().toString(), 100, "sim", clientId, clientSecret);
                                 getCall(call, adapterSearch);
                                 break;
                             case "날짜순":
-                                call = retrofitAPI.getData(editText.getText().toString(), 100, "date", clientId, clientSecret);
+                                call = InsRetrofit.getInstance().retrofitAPI.getData(editText.getText().toString(), 100, "date", clientId, clientSecret);
                                 getCall(call, adapterSearch);
                                 break;
                             case "가격낮은순":
-                                call = retrofitAPI.getData(editText.getText().toString(), 100, "asc", clientId, clientSecret);
+                                call = InsRetrofit.getInstance().retrofitAPI.getData(editText.getText().toString(), 100, "asc", clientId, clientSecret);
                                 getCall(call, adapterSearch);
                                 break;
                             case "가격높은순":
-                                call = retrofitAPI.getData(editText.getText().toString(), 100, "dsc", clientId, clientSecret);
+                                call = InsRetrofit.getInstance().retrofitAPI.getData(editText.getText().toString(), 100, "dsc", clientId, clientSecret);
                                 getCall(call, adapterSearch);
                                 break;
                         }
