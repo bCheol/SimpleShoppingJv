@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class FragmentBasket extends Fragment {
 
     SQLiteDatabase sqLiteDatabase;
@@ -43,6 +45,16 @@ public class FragmentBasket extends Fragment {
         cursor.close();
 
         recyclerView.setAdapter(adapterBasket);
+
+        //플로팅 버튼 생성, 실행
+        FloatingActionButton floatingActionButton = root.findViewById(R.id.floatingButton);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerView.scrollToPosition(0);
+            }
+        });
 
         Toast toast = Toast.makeText(requireContext(),"삭제됐습니다.",Toast.LENGTH_SHORT);
 
