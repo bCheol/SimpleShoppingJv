@@ -5,9 +5,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class InsRetrofit {
 
+    private static InsRetrofit INSTANCE = null;
     RetrofitAPI retrofitAPI;
 
-    public InsRetrofit() {
+    private InsRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://openapi.naver.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -15,10 +16,10 @@ public class InsRetrofit {
         retrofitAPI = retrofit.create(RetrofitAPI.class);
     }
 
-    private static class singleInstanceHolder {
-        private static final InsRetrofit INSTANCE = new InsRetrofit();
-    }
     public static synchronized InsRetrofit getInstance() {
-        return singleInstanceHolder.INSTANCE;
+        if(INSTANCE == null){
+            INSTANCE = new InsRetrofit();
+        }
+        return INSTANCE;
     }
 }
