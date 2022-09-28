@@ -163,14 +163,11 @@ public class FragmentSearch extends Fragment {
                         }
                         recyclerView.setAdapter(adapter);
                         //리사이클러뷰 마지막 스크롤 시 알림
-                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                             @Override
-                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                super.onScrolled(recyclerView, dx, dy);
-                                int lastPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                                int itemTotalCount = adapter.getItemCount()- 1;
-                                if (lastPosition == itemTotalCount) {
-                                    Toast.makeText(getContext(), "마지막 입니다.", Toast.LENGTH_SHORT).show();
+                            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                                if(!view.canScrollVertically(1)){
+                                    Toast.makeText(getContext(), "마지막입니다.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

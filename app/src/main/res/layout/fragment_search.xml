@@ -13,7 +13,8 @@
         android:layout_weight="0.8"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@color/purple_200">
+        android:background="@color/purple_200"
+        android:id="@+id/titleLayout">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,8 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
-            android:gravity="center"
-            android:background="@color/white">
+            android:gravity="center">
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,8 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:background="@color/white">
+            android:orientation="vertical">
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:src="@drawable/icon_up"
-            android:layout_margin="16dp"
+            android:layout_margin="10dp"
             app:backgroundTint="@color/purple_200"
             app:fabSize="mini"
             app:tint="@null"/>
